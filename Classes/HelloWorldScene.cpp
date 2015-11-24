@@ -17,6 +17,11 @@ Scene* HelloWorld::createScene()
     return scene;
 }
 
+void HelloWorld::update(float delta)
+{
+
+}
+
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
@@ -46,11 +51,18 @@ bool HelloWorld::init()
     // create menu, it's an autorelease object
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+	this->addChild(menu, 1);
 
     /////////////////////////////
     // 3. add your codes below...
 
+	auto logo = Sprite::create("Logo_Fanta.png");
+	Size currentSize = logo->getContentSize();
+	Size targetSize = Size(128, 128);
+
+	logo->setPosition(Vec2(200, 200));
+	logo->setScale(targetSize.width / currentSize.width, targetSize.height / currentSize.height);
+	this->addChild(logo);
     // add a label shows "Hello World"
     // create and initialize a label
     
@@ -71,7 +83,19 @@ bool HelloWorld::init()
 
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
-    
+
+	auto move = MoveTo::create(3, Vec2(880, 440));
+	logo->runAction(EaseBackInOut::create(move->clone()));
+
+	auto emitter = ParticleFireworks::create();
+
+	emitter->setEmitterMode(ParticleSystem::Mode::RADIUS);
+	emitter->setStartRadius(100);
+	emitter->setStartRadiusVar(0);
+	emitter->setEndRadius(ParticleSystem::START_RADIUS_EQUAL_TO_END_RADIUS);
+	//emitter->setEndRadiusVar(0);    // not used when start == end
+	addChild(emitter, 10);
+
     return true;
 }
 
